@@ -13,8 +13,11 @@ void main() {
 ## API
 ### StanfordCoreNLP
 StanfordCoreNLP constructor takes two required parameters and one optional.
-`_coreNlpPath`: Path to Stanford CoreNLP directory 
+
+`_coreNlpPath`: Path to Stanford CoreNLP directory
+
 `_annotators`: A list of Stanford CoreNLP annotators
+
 `_javaHeapSize`: Java heap size (default = 3)
 
 ```dart
