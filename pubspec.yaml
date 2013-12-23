@@ -1,0 +1,7 @@
+name: stanford_corenlp_dart
+version: 0.0.03
+author: Nawaf Alsallami <nawafnaim@gmail.com>
+description: Dart wrapper for Stanford Core NLP tools.
+homepage: https://github.com/nawafnaim/StanfordCoreNLP_Dart
+dependencies:
+  observe: '>=0.9.3 <0.9.4'
