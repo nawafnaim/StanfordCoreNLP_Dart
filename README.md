@@ -6,7 +6,8 @@ import 'package:stanford_corenlp_dart/stanford_corenlp_dart.dart';
 void main() {
   StanfordCoreNLP sfCore = new StanfordCoreNLP('stanford-corenlp', ['tokenize', 'ssplit', 'pos', 'lemma', 'parse'], 6);
   Future ready = sfCore.run();
-  ready.then((e) => sfCore.process('Dart is a new platform for scalable web app engineering.').onData((String result) => print(result)));
+  ready.then((e) => sfCore.process('Dart is a new platform for scalable web app engineering.')
+  	.onData((String result) => print(result)));
 }
 ```
 
