@@ -22,6 +22,9 @@ class StanfordCoreNLP extends Object with ChangeNotifier {
     _outputText = notifyPropertyChange(#outputText, _outputText, val);
   }
  
+  StreamSubscription<String> outputStreamSub;
+
+  
   StanfordCoreNLP(this._coreNlpPath, this._annotators, [this._javaHeapSize = 3]) {
     _coreNlpJars = new Map();
     Directory dir = new Directory(_coreNlpPath);
@@ -36,6 +39,11 @@ class StanfordCoreNLP extends Object with ChangeNotifier {
           _coreNlpJars['models'] = path;
       });
     };
+    
+    outputStreamSub = this.changes.where((List<ChangeRecord> record) => new RegExp(r'outputText').hasMatch(record.join(',')))
+        .map((e) => e.toString().replaceAllMapped(new RegExp(r'(^(?:.|\n)+to:  ?)|(^(?:.|\n)+from: )|(.+$)', caseSensitive: false), (Match m) => ''))
+          .listen((List<ChangeRecord> record) {
+          });
     
   }
   
@@ -55,7 +63,7 @@ class StanfordCoreNLP extends Object with ChangeNotifier {
         runInShell: true).then((process) {
           process.stdout
           .transform(new Utf8Decoder())
-              .listen((String line) => outputText += line);
+              .listen((String line) => outputText = line);
           this.changes.listen((List<ChangeRecord> record) {
             if (new RegExp(r'inputText').hasMatch(record[0].toString())) {
               process.stdin.writeln(inputText);
@@ -66,13 +74,10 @@ class StanfordCoreNLP extends Object with ChangeNotifier {
     return compl.future;
   }
   
+  
   StreamSubscription<String> process(String text) {
     inputText = text;
-    return
-    this.changes.where((List<ChangeRecord> record) => new RegExp(r'outputText"\) from: \w').hasMatch(record.join(',')))
-      .map((e) => e.toString().replaceAllMapped(new RegExp(r'(^((.+\n)+\n to: ))|(.+$)', caseSensitive: false), (Match m) => ''))
-        .listen((List<ChangeRecord> record) {
-    });
+    return outputStreamSub;
   }
 }
 
